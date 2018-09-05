@@ -1,5 +1,7 @@
 # Self-Documented Makefile https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 
+ndef = $(if $(value $(1)),,$(error $(1) argument not set))
+
 .PHONY: build run post help
 
 default: help
@@ -11,11 +13,8 @@ run: ## starts hugo webserver, which watches hugo files for changes, rebuilds th
 	hugo server -D --disableFastRender
 
 post: ## creates a new post (make post name=new_post_name)
-	@if [[ "${name}" != "" ]]; then\
-        hugo new post/"${name}".md;\
-	else\
-		echo "post name is not specified";\
-    fi
+	$(call ndef,name)
+	@hugo new post/${name}.md
 
 deploy: ## deploys the latest changes on damyanon.net
 	@echo "place your deploy command here"
